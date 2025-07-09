@@ -18,7 +18,7 @@ async def earn(msg: types.Message):
     await msg.reply(
         f"📌 Вот задания:\n\n"
         f"1️⃣ Установи Honeygain — {config.HONEYGAIN_REF} (получишь $5!)\n"
-        f"2️⃣ Кликни краны:\n• FaucetPay: {config.FAUCETPAY_REF}\n• RollerCoin: {config.ROLLERCOIN_REF}\n"
+        f"2️⃣ Кликни краны:\n• FaucetPay: {config.FAUCETPAY_REF}"
         f"\n✅ Зарабатывай легко! Новые задания — каждый день!"
     )
 
