@@ -1,25 +1,34 @@
 from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
+from aiogram.enums import ParseMode
+from aiogram.types import Message
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram import Router
+import asyncio
 import config
 
-bot = Bot(token=config.BOT_TOKEN)
-dp = Dispatcher(bot)
+# Инициализация
+bot = Bot(token=config.BOT_TOKEN, parse_mode=ParseMode.HTML)
+dp = Dispatcher(storage=MemoryStorage())
+router = Router()
+dp.include_router(router)
 
-@dp.message_handler(commands=['start'])
-async def start(msg: types.Message):
-    text = (
-        "👋 Привет! Я помогу тебе зарабатывать крипту и деньги!\n"
-        "🔗 Жми /earn для начала!"
-    )
-    await msg.reply(text)
+# Команда /start
+@router.message(commands=["start"])
+async def start_handler(message: Message):
+    await message.answer("👋 Привет! Я бот для пассивного дохода.\nНажми /earn чтобы получить задания.")
 
-@dp.message_handler(commands=['earn'])
-async def earn(msg: types.Message):
-    await msg.reply(
-        f"📌 Вот задания:\n\n"
-        f"1️⃣ Установи Honeygain — {config.HONEYGAIN_REF} (получишь $5!)\n"
-        f"2️⃣ Кликни краны:\n• FaucetPay: {config.FAUCETPAY_REF}"
-        f"\n✅ Зарабатывай легко! Новые задания — каждый день!"
-    )
+# Команда /earn
+@router.message(commands=["earn"])
+async def earn_handler(message: Message):
+    links = [
+        "<b>📱 Honeygain</b>: <a href='https://r.honeygain.me/DATELCF308'>Перейти по ссылке</a>",
+        "<b>💰 FaucetPay</b>: <a href='https://faucetpay.io/?r=9207641'>Получать крипту</a>"
+    ]
+    await message.answer("\n\n".join(links), disable_web_page_preview=True)
 
-executor.start_polling(dp)
+# Запуск бота
+async def main():
+    await dp.start_polling(bot)
+
+if name == "__main__":
+    asyncio.run(main())
